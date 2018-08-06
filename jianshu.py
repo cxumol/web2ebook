@@ -14,6 +14,7 @@ headers = {"Host" : "www.jianshu.com",
 "Connection" : "keep-alive"}
 
 class Article(object):
+    '''jianshu 简书'''
     
     def __init__(self, url):
         self.url = url
@@ -39,7 +40,7 @@ class Article(object):
         if not os.path.exists(prefix):
             os.makedirs(prefix)
         for imgurl in img_urls:
-            fname = re.search("upload_images/(.*?jpg)",imgurl).group(1)
+            fname = prefix + re.search("upload_images/(.*?jpg)",imgurl).group(1)
             imgurl = 'https://'+imgurl
             ir = requests.get(imgurl)
             sz = open(fname, 'wb').write(ir.content)
