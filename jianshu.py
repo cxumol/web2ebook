@@ -31,8 +31,12 @@ class Article(object):
 
         ctt = re.search('''<!-- 文章内容 -->(.*?)<!-- 如果是付费文章，未购买，则显示购买按钮 -->''', html, re.DOTALL).group(1)
         # 处理图片
-        img_urls = re.findall("upload-images.jianshu.io/upload_images/.*?jpg", html)
+        img_urls = re.findall("upload-images.jianshu.io/upload_images/.*?jpg|upload-images.jianshu.io/upload_images/.*?gif", html)
         ctt_alterimg = ctt.replace('//upload-images.jianshu.io/upload_images/','../Images/')
+        
+        # 替换 
+        ctt_altimg = re.sub('<div class="image-package">.*?<div.*?<div.*?<div.*?(<img.*?/>).*?\
+        (<div class="image-caption">.*?</div>)\s*?</div>', "\1\2", ctt_altimg, flags = re.DOTALL)
         self.content = ctt_alterimg
 
         # 下载图片
@@ -40,7 +44,7 @@ class Article(object):
         if not os.path.exists(prefix):
             os.makedirs(prefix)
         for imgurl in img_urls:
-            fname = prefix + re.search("upload_images/(.*?jpg)",imgurl).group(1)
+            fname = prefix + re.search("upload_images/(.*)",imgurl).group(1)
             imgurl = 'https://'+imgurl
             ir = requests.get(imgurl)
             sz = open(fname, 'wb').write(ir.content)

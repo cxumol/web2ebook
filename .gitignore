@@ -1,6 +1,7 @@
 *.jpg
 *.html
 *.epub
+*.gif
 
 
 # Created by https://www.gitignore.io/api/python
